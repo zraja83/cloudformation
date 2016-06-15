@@ -82,9 +82,13 @@
         "ClusterParameterGroupName": { "Ref": "RedshiftClusterParameterGroup" },
         "VpcSecurityGroupIds": [ { "Ref": "SecurityGroup" } ],
         "ClusterSubnetGroupName": { "Ref": "RedshiftClusterSubnetGroup" },
-        "PubliclyAccessible": "true"
-      }
-    },
+        "PubliclyAccessible": "true",
+        "automated_snapshot_retention_period" : "7",
+        "allow_version_upgrade" : "true",
+        "encrypted" : "true"
+      },
+        "DeletionPolicy" : "Snapshot"
+      },
     "RedshiftClusterParameterGroup": {
       "Type": "AWS::Redshift::ClusterParameterGroup",
       "Properties": {
