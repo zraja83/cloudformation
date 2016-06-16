@@ -16,6 +16,22 @@
       "Description" : "VpcId of your existing Virtual Private Cloud (VPC)",
       "Default" : "vpc-5756cf33"
     },
+    "Subnet01": {
+      "Type" : "String",
+      "Description" : "First Subnet of your Cluster Subnet Group",
+      "Default" : "10.51.18.0/24"
+    },
+
+    "Subnet02": {
+      "Type" : "String",
+      "Description" : "Second Subnet of your Cluster Subnet Group",
+      "Default" : "10.51.19.0/24"
+    },
+    "MyKey": {
+      "Type" : "String",
+      "Description" : "VpcId of your existing Virtual Private Cloud (VPC)",
+      "Default" : "3f042e68-5058-4696-ab13-52ad0f994c8b"
+    },
 
     "ClusterType": {
       "Description": "The type of the cluster",
@@ -82,10 +98,11 @@
         "ClusterParameterGroupName": { "Ref": "RedshiftClusterParameterGroup" },
         "VpcSecurityGroupIds": [ { "Ref": "SecurityGroup" } ],
         "ClusterSubnetGroupName": { "Ref": "RedshiftClusterSubnetGroup" },
-        "PubliclyAccessible": "true",
-        "automated_snapshot_retention_period" : "7",
-        "allow_version_upgrade" : "true",
-        "encrypted" : "true"
+        "PubliclyAccessible": "false",
+        "AutomatedSnapshotRetentionPeriod" : "7",
+        "AllowVersionUpgrade" : "true",
+        "Encrypted" : "true",
+        "KmsKeyId" : { "Ref": "MyKey" }
       },
         "DeletionPolicy" : "Snapshot"
       },
@@ -104,16 +121,25 @@
       "Type": "AWS::Redshift::ClusterSubnetGroup",
       "Properties": {
         "Description": "Cluster subnet group",
-        "SubnetIds": [ { "Ref": "Subnet" } ]
+        "SubnetIds": [{ "Ref": "Subnet1" },
+                      { "Ref": "Subnet2" }]
       }
     },
-    "Subnet": {
+    "Subnet1": {
       "Type": "AWS::EC2::Subnet",
       "Properties": {
-        "CidrBlock": "10.51.18.0/24",
+        "CidrBlock" : { "Ref": "Subnet01" },
         "VpcId": { "Ref": "VpcId" }
       }
     },
+    "Subnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock" : { "Ref": "Subnet02" },
+        "VpcId": { "Ref": "VpcId" }
+      }
+    },
+
 
     "SecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
